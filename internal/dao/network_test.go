@@ -16,7 +16,7 @@ func TestNetworkDao(t *testing.T) {
 			Timeout: timeout,
 		}
 		client.Response = util.GetValidResponseForExchangeRate()
-		dao := getValidNetworkDao(client)
+		dao := GetValidTestNetworkDao(client)
 
 		// when
 		body, err := dao.GetExchangeRateForNow("EUR", "GBP")
@@ -33,7 +33,7 @@ func TestNetworkDao(t *testing.T) {
 			Timeout: timeout,
 		}
 		client.Response = util.GetValidResponseForExchangeRate()
-		dao := getValidNetworkDao(client)
+		dao := GetValidTestNetworkDao(client)
 
 		// when
 		body, err := dao.GetExchangeRateForNow("EUR", "USD")
@@ -50,7 +50,7 @@ func TestNetworkDao(t *testing.T) {
 			Timeout: timeout,
 		}
 		client.Response = util.GetInvalidResponseForExchangeRate()
-		dao := getValidNetworkDao(client)
+		dao := GetValidTestNetworkDao(client)
 
 		// when
 		body, err := dao.GetExchangeRateForNow("EUR", "GBP")
@@ -67,7 +67,7 @@ func TestNetworkDao(t *testing.T) {
 			Timeout: timeout,
 		}
 		client.Response = util.GetInalid200ResponseForExchangeRate()
-		dao := getValidNetworkDao(client)
+		dao := GetValidTestNetworkDao(client)
 
 		// when
 		body, err := dao.GetExchangeRateForNow("EUR", "GBP")
@@ -84,10 +84,10 @@ func TestNetworkDao(t *testing.T) {
 			Timeout: timeout,
 		}
 		client.Response = util.GetValidResponseForExchangeRate()
-		dao := getValidNetworkDao(client)
+		dao := GetValidTestNetworkDao(client)
 
 		// when
-		body, err := dao.GetExchangeRateFromWeekAgo("EUR", "GBP", time.Now())
+		body, err := dao.GetExchangeRateFromPast("EUR", "GBP", time.Now())
 
 		// then
 		util.AssertErrorNil(t, err)
@@ -95,6 +95,6 @@ func TestNetworkDao(t *testing.T) {
 	})
 }
 
-func getValidNetworkDao(client *util.ClientMock) dao.NetworkDAO {
-	return dao.CreateNewFerAPI("https://api.exchangeratesapi.io/latest", "latest", "2019-10-13", 3, client)
+func GetValidTestNetworkDao(client *util.ClientMock) dao.NetworkDAO {
+	return dao.CreateNewFerAPI("https://api.exchangeratesapi.io/latest", "latest", "2006-01-02", 3, client)
 }

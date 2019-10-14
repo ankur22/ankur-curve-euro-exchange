@@ -71,6 +71,14 @@ func AssertTrue(t *testing.T, actual bool) {
 	}
 }
 
+// AssertFalse - assert actual is false
+func AssertFalse(t *testing.T, actual bool) {
+	t.Helper()
+	if actual {
+		t.Fatal("expected 'false' but actual is 'true'")
+	}
+}
+
 // AssertNotNil - asserts actual is not nil
 func AssertNotNil(t *testing.T, actual time.Time) {
 	t.Helper()

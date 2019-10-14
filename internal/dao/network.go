@@ -21,7 +21,7 @@ type ExchangeRateResponse struct {
 //				network (e.g. HTTP, FTP etc.)
 type NetworkDAO interface {
 	GetExchangeRateForNow(from, to string) (*ExchangeRateResponse, error)
-	GetExchangeRateFromWeekAgo(from, to string, date time.Time) (*ExchangeRateResponse, error)
+	GetExchangeRateFromPast(from, to string, date time.Time) (*ExchangeRateResponse, error)
 }
 
 // HTTPClient - Http client interface
@@ -49,8 +49,8 @@ func (f *ferAPI) GetExchangeRateForNow(from, to string) (*ExchangeRateResponse, 
 	return f.getRequest(from, to, f.latest)
 }
 
-// GetExchangeRateFromWeekAgo - Get the exchange rate for {from} to {to} from n days back
-func (f *ferAPI) GetExchangeRateFromWeekAgo(from, to string, date time.Time) (*ExchangeRateResponse, error) {
+// GetExchangeRateFromPast - Get the exchange rate for {from} to {to} from n days back
+func (f *ferAPI) GetExchangeRateFromPast(from, to string, date time.Time) (*ExchangeRateResponse, error) {
 	test := date.Format(f.layoutISO)
 	return f.getRequest(from, to, test)
 }
