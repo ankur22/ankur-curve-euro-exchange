@@ -51,6 +51,10 @@ func (v *v1Exchange) getQueryParams(c *gin.Context) (string, string, error) {
 		return "", "", errors.New(fmt.Sprintf("%s is not a valid currency", to))
 	}
 
+	if from == to {
+		return "", "", errors.New(fmt.Sprintf("from '%s' and to are the same, they need to be different", from))
+	}
+
 	return from, to, nil
 }
 

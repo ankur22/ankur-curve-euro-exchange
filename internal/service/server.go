@@ -36,6 +36,7 @@ func (s *exchangeServer) Register(name string, e Endpoint) {
 }
 
 func (s *exchangeServer) Start() {
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
 	for name, e := range s.endpoints {

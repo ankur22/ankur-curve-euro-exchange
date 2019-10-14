@@ -7,6 +7,7 @@ import (
 	"github.com/ankur22/ankur-curve-euro-exchange/internal/dao"
 	"github.com/ankur22/ankur-curve-euro-exchange/internal/util"
 	"github.com/pkg/errors"
+	"golang.org/x/sync/semaphore"
 )
 
 // ExchangeRateServiceResponse - Response for the exchange rate
@@ -36,13 +37,23 @@ type localExchangeRateService struct {
 	dataValidDuration time.Duration
 	clock             *util.Clock
 	timeout           time.Duration
+	sem               *semaphore.Weighted
 }
 
 // CreateNewExchangeRateService - Use this to create the service
 //								  layer.
-func CreateNewExchangeRateService(networkDAO dao.NetworkDAO, dbDAO dao.DatabaseDAO, dataValidDuration time.Duration, clock *util.Clock, timeout time.Duration) *localExchangeRateService {
-	service := &localExchangeRateService{networkDAO: networkDAO, dbDAO: dbDAO, dataValidDuration: dataValidDuration, clock: clock, timeout: timeout}
-	return service
+func CreateNewExchangeRateService(networkDAO dao.NetworkDAO,
+	dbDAO dao.DatabaseDAO,
+	dataValidDuration time.Duration,
+	clock *util.Clock,
+	timeout time.Duration) *localExchangeRateService {
+
+	return &localExchangeRateService{networkDAO: networkDAO,
+		dbDAO:             dbDAO,
+		dataValidDuration: dataValidDuration,
+		clock:             clock,
+		timeout:           timeout,
+		sem:               semaphore.NewWeighted(1)}
 }
 
 // PerformRequest - Get the exchange rate netween from and to.
@@ -50,8 +61,17 @@ func CreateNewExchangeRateService(networkDAO dao.NetworkDAO, dbDAO dao.DatabaseD
 func (l *localExchangeRateService) PerformRequest(from, to string) (*ExchangeRateServiceResponse, error) {
 	oneUnit, shouldExchange, dataDateTime := l.dbDAO.Get(from, to)
 	if l.hasStoredValueExpired(dataDateTime) {
-		// TODO: Only allow one thread to execute this
-		// 		 Other threads need to wait and check DB.
+		// Only allow one thread to perform
+		// the network request and save to the db
+		if !l.sem.TryAcquire(1) {
+			// If no data available then return error
+			if dataDateTime.IsZero() {
+				return nil, errors.New("Timed out waiting for another thread to complete network request")
+			}
+			// Use expired data
+			return &ExchangeRateServiceResponse{DataDateTime: dataDateTime, OneUnit: oneUnit, ShouldExchange: shouldExchange}, nil
+		}
+		defer l.sem.Release(1)
 		oneUnit, shouldExchange, dataDateTime, err := l.getAndStoreNewValues(from, to)
 		if err != nil {
 			return nil, err

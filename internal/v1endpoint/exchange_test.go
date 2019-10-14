@@ -54,6 +54,26 @@ func TestExchangeEndpoint(t *testing.T) {
 		server.Stop(time.Duration(time.Second))
 		util.AssertTrue(t, data.Reason == "query params are invalid. EUR, USD and GBP are valid.")
 	})
+
+	t.Run("ensure 400 response when from and to are the same", func(t *testing.T) {
+		// given
+		eService := givenValidExchangeService()
+		endpoint := v1endpoint.CreateNewV1Exchange(&eService, givenValidCuirrenciesList())
+		server := service.CreateNewServer()
+		server.Register("GET /v1/exchange", endpoint)
+		go server.Start()
+		time.Sleep(time.Millisecond * 500)
+
+		// when
+		body := performGetRequest(t, "EUR", "EUR", 400)
+		data := unmarshalFail(t, "EUR", "EUR", body)
+
+		time.Sleep(time.Millisecond * 500)
+
+		// then
+		server.Stop(time.Duration(time.Second))
+		util.AssertTrue(t, data.Reason == "query params are invalid. EUR, USD and GBP are valid.")
+	})
 }
 
 type mockExchangeService struct {
