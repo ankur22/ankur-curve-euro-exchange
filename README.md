@@ -85,10 +85,11 @@ To run all tests:
 go test ./...
 ```
 
-## Bugs
+## Bugs and Improvements
 
 1. 500 response with no reason in json response body
-2. No logging
+2. Requires logging to be implemented
+3. Requires [Cobra](https://github.com/spf13/cobra) and [Viper](https://github.com/spf13/viper) integration
 
 ## Test Environment
 
