@@ -50,6 +50,8 @@ func CreateNewExchangeRateService(networkDAO dao.NetworkDAO, dbDAO dao.DatabaseD
 func (l *localExchangeRateService) PerformRequest(from, to string) (*ExchangeRateServiceResponse, error) {
 	oneUnit, shouldExchange, dataDateTime := l.dbDAO.Get(from, to)
 	if l.hasStoredValueExpired(dataDateTime) {
+		// TODO: Only allow one thread to execute this
+		// 		 Other threads need to wait and check DB.
 		oneUnit, shouldExchange, dataDateTime, err := l.getAndStoreNewValues(from, to)
 		if err != nil {
 			return nil, err

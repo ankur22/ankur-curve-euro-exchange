@@ -31,17 +31,16 @@ type HTTPClient interface {
 
 // FerAPI - Gets exchange rates from https://exchangeratesapi.io/
 type ferAPI struct {
-	url        string
-	client     HTTPClient
-	latest     string
-	layoutISO  string
-	retryCount int
+	url       string
+	client    HTTPClient
+	latest    string
+	layoutISO string
 }
 
 // CreateNewFerAPI - Create new ferAPI to get exchange rates
 //					 from https://exchangeratesapi.io/
-func CreateNewFerAPI(url, latest, layoutISO string, retryCount int, client HTTPClient) *ferAPI {
-	return &ferAPI{url: url, client: client, layoutISO: layoutISO, retryCount: retryCount, latest: latest}
+func CreateNewFerAPI(url, latest, layoutISO string, client HTTPClient) *ferAPI {
+	return &ferAPI{url: url, client: client, layoutISO: layoutISO, latest: latest}
 }
 
 // GetExchangeRateForNow - Get the exchange rate for {from} to {to}
