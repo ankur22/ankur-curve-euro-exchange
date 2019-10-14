@@ -87,9 +87,11 @@ go test ./...
 
 ## Bugs and Improvements
 
-1. 500 response with no reason in json response body
-2. Requires logging to be implemented
-3. Requires [Cobra](https://github.com/spf13/cobra) and [Viper](https://github.com/spf13/viper) integration
+1. 500 response with no reason in json response body.
+2. Requires logging to be implemented.
+3. Requires [Cobra](https://github.com/spf13/cobra) and [Viper](https://github.com/spf13/viper) integration.
+4. More unit tests around failure cases, especially when a thread is getting data from network and other threads have to use stale data.
+5. Integration tests.
 
 ## Test Environment
 
