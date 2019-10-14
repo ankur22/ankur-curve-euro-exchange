@@ -2,31 +2,32 @@
 
 ## API
 
-### Request - `/v1/exchange`
-Query parameter: `from`
-<br />
-(required)
-<br />
-{"EUR", "USD", "GBP"}
-<br />
-Query parameter: `to`
-<br />
-(required)
-<br />
-{"EUR", "USD", "GBP"}
-<br />
+### Request - `/v1/exchange?from={"EUR", "USD", "GBP"}&to={"EUR", "USD", "GBP"}`
 Type: `GET`
+<br />
+<br />
+Query parameter: `from` (required)
+<br />
+Valid values: {"EUR", "USD", "GBP"}
+<br />
+<br />
+Query parameter: `to` (required)
+<br />
+Valid values: {"EUR", "USD", "GBP"}
 
 #### Response
 Status: `200`
+<br />
 Body: `{"dataDateTime":"2019-10-14T19:21:48.11587894+01:00","from":"EUR","shouldExchange":false,"singleUnit":1.1031,"to":"USD"}`
 <br />
 <br />
 Status: `400`
+<br />
 Body: `{"reason":"query params are invalid. EUR, USD and GBP are valid."}`
 <br />
 <br />
 Status: `500`
+<br />
 Body: `{"reason":""}`
 
 #### cURL
