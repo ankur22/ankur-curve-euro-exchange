@@ -2,7 +2,7 @@
 
 set -e
 
-GIT_COMMIT="blah"
+GIT_COMMIT=$(git rev-list -1 HEAD)
 VERSION=$(cat version.txt)
 
 TARGET_DIR=release/$VERSION

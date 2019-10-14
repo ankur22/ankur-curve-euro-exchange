@@ -1,5 +1,12 @@
 # Ankur's Exchange Rate Server Service for Curve
 
+This will look at the exchange of currencies between EUR, USD and GBP:
+
+1. Get today's exchange value from currency1 to currency2.
+2. Get last week's exchange value from currency1 to currency2.
+3. Perform a naive comparison between the two to determine if today is a good time to exchange currency1 into currency2.
+4. Return the results -- single unit of curreny1 to curreny2 and the result of the naive comparison.
+
 ## API
 
 ### Request - `/v1/exchange?from={"EUR", "USD", "GBP"}&to={"EUR", "USD", "GBP"}`

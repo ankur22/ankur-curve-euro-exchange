@@ -117,7 +117,7 @@ func (l *localExchangeRateService) getAndStoreNewValues(from, to string) (float3
 		return 0, false, time.Time{}, errors.New("Timeout occured while waiting for response from network layer")
 	}
 
-	shouldExchange := weekOld.Rates[to] > latest.Rates[to]
+	shouldExchange := weekOld.Rates[to] < latest.Rates[to]
 	dataDateTime := l.clock.Now()
 	l.dbDAO.Store(from, to, latest.Rates[to], shouldExchange, dataDateTime)
 

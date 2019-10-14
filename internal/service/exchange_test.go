@@ -24,7 +24,7 @@ func TestExchangeRateService(t *testing.T) {
 		// then
 		util.AssertErrorNil(t, err)
 		util.AssertFalse(t, resp == nil)
-		util.AssertFalse(t, resp.ShouldExchange)
+		util.AssertTrue(t, resp.ShouldExchange)
 	})
 
 	t.Run("ensure cached values retrieved if valid in DB", func(t *testing.T) {
@@ -43,7 +43,7 @@ func TestExchangeRateService(t *testing.T) {
 		// then
 		util.AssertErrorNil(t, err)
 		util.AssertFalse(t, resp2 == nil)
-		util.AssertFalse(t, resp2.ShouldExchange)
+		util.AssertTrue(t, resp2.ShouldExchange)
 		util.AssertTrue(t, resp1.DataDateTime == resp2.DataDateTime)
 		util.AssertFalse(t, networkDao.latestCalled)
 		util.AssertFalse(t, networkDao.weekOldCalled)
@@ -65,7 +65,7 @@ func TestExchangeRateService(t *testing.T) {
 		// then
 		util.AssertErrorNil(t, err)
 		util.AssertFalse(t, resp2 == nil)
-		util.AssertFalse(t, resp2.ShouldExchange)
+		util.AssertTrue(t, resp2.ShouldExchange)
 		util.AssertFalse(t, resp1.DataDateTime == resp2.DataDateTime)
 		util.AssertTrue(t, networkDao.latestCalled)
 		util.AssertTrue(t, networkDao.weekOldCalled)
